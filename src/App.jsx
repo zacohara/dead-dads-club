@@ -24,14 +24,18 @@ const finish=()=>{timers.current.forEach(t=>clearTimeout(t));try{sessionStorage.
 useEffect(()=>{
 // Skip for return visitors
 try{if(sessionStorage.getItem('ddc-seen')){onDone();return}}catch(e){}
-timers.current=[setTimeout(()=>setP(1),200),setTimeout(()=>setP(2),1400),setTimeout(()=>setP(3),2600),setTimeout(finish,3400)];
+timers.current=[setTimeout(()=>setP(1),200),setTimeout(()=>setP(2),1200),setTimeout(()=>setP(3),2400),setTimeout(finish,3200)];
 return()=>timers.current.forEach(t=>clearTimeout(t))},[]);
 return(<div onClick={finish} style={{position:"fixed",inset:0,zIndex:9999,background:"#000",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",
 opacity:p>=3?0:1,transition:"opacity 0.8s ease",pointerEvents:p>=3?"none":"all"}}>
-{p>=1&&<div style={{animation:"fadeIn 0.8s ease",position:"relative"}}><Logo size={180}/>
-<div style={{position:"absolute",inset:-24,borderRadius:8,boxShadow:`0 0 ${p>=2?100:30}px ${p>=2?50:15}px rgba(200,169,81,${p>=2?0.25:0.08})`,transition:"all 1s ease"}}/></div>}
-{p>=2&&<p style={{marginTop:36,fontFamily:CG,fontSize:22,color:`${GL}cc`,fontStyle:"italic",letterSpacing:2,animation:"fadeUp 0.8s ease",textAlign:"center",padding:"0 32px"}}>
-The only club you never wanted to join.</p>}
+{p>=1&&<div style={{animation:"fadeIn 0.8s ease",position:"relative",textAlign:"center"}}>
+<Logo size={140} style={{margin:"0 auto"}}/>
+<div style={{position:"absolute",inset:-30,borderRadius:8,boxShadow:`0 0 ${p>=2?120:30}px ${p>=2?60:15}px rgba(200,169,81,${p>=2?0.2:0.06})`,transition:"all 1s ease"}}/>
+</div>}
+{p>=2&&<div style={{animation:"fadeUp 0.8s ease",textAlign:"center",marginTop:28}}>
+<h1 style={{fontFamily:CG,fontSize:"clamp(32px,8vw,56px)",fontWeight:700,color:CR,lineHeight:1,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>The Dead Dads Club</h1>
+<p style={{fontFamily:CG,fontSize:"clamp(16px,3vw,22px)",color:CR,fontStyle:"italic",letterSpacing:2,opacity:0.7}}>
+The only club you never wanted to join.</p></div>}
 {p>=1&&<p style={{position:"absolute",bottom:32,fontSize:13,color:"#444",letterSpacing:2,animation:"fadeIn 1s ease"}}>{isTouch?"tap":"click"} anywhere to skip</p>}
 </div>)}
 
@@ -75,11 +79,16 @@ setMyNum((wc||0)+1);setSub(true);setIng(false);setEmail("")};
 const pct=wc===null?0:Math.min((wc/CAP)*100,100);const left=wc===null?null:Math.max(CAP-wc,0);
 function ago(d){const m=Math.floor((Date.now()-new Date(d).getTime())/60000);if(m<1)return"just now";if(m<60)return m+"m ago";const h=Math.floor(m/60);return h<24?h+"h ago":Math.floor(h/24)+"d ago"}
 
-return(<section id="top" ref={ref} style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"100px 24px 80px",position:"relative",overflow:"hidden",textAlign:"center"}}>
-<div style={{position:"absolute",inset:0,background:`radial-gradient(ellipse at 50% 25%,#151008 0%,${D} 70%)`,zIndex:0}}/>
-<div style={{position:"relative",zIndex:1,maxWidth:700,opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(30px)",transition:"all 1.2s ease"}}>
-<div style={{marginBottom:32}}><Logo size={320} full={true} style={{margin:"0 auto",maxWidth:"85vw"}}/></div>
-<p style={{fontFamily:CG,fontSize:"clamp(18px,3vw,24px)",color:`${GL}cc`,fontStyle:"italic",marginBottom:48,letterSpacing:1.5}}>
+return(<section id="top" ref={ref} style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"80px 20px 80px",position:"relative",overflow:"hidden",textAlign:"center"}}>
+<div style={{position:"absolute",inset:0,background:`radial-gradient(ellipse at 50% 35%,#18120a 0%,${D} 70%)`,zIndex:0}}/>
+<div style={{position:"relative",zIndex:1,maxWidth:700,width:"100%",opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(30px)",transition:"all 1.2s ease"}}>
+
+{/* Logo icon (skeleton only — no baked text) + title as real HTML */}
+<div style={{marginBottom:20}}><Logo size={160} style={{margin:"0 auto",maxWidth:"45vw"}}/></div>
+<h1 style={{fontFamily:CG,fontSize:"clamp(40px,10vw,72px)",fontWeight:700,color:CR,lineHeight:1,letterSpacing:2,marginBottom:8,textTransform:"uppercase"}}>
+The Dead<br/>Dads Club</h1>
+<GDiv/>
+<p style={{fontFamily:CG,fontSize:"clamp(20px,4vw,28px)",color:CR,fontStyle:"italic",marginTop:20,marginBottom:44,letterSpacing:1,opacity:0.85}}>
 The only club you never wanted to join.</p>
 
 {!submitted?(<div><div style={{display:"flex",gap:0,maxWidth:460,margin:"0 auto",borderRadius:3,overflow:"hidden",border:`1px solid ${err?RD:DB}`}}>
@@ -388,7 +397,7 @@ opacity:v?1:0,transform:v?"translateY(0)":"translateY(24px)",transition:`all 0.7
 fontFamily:OF,fontSize:14,fontWeight:700,letterSpacing:2,textTransform:"uppercase",textDecoration:"none"}}>Join the Waitlist</a></div>))}</div></div></SW>)}
 
 function Founder(){const[r,v]=useInView();return(<SW bg="#080808"><div ref={r} style={{maxWidth:640,margin:"0 auto",textAlign:"center",opacity:v?1:0,transform:v?"translateY(0)":"translateY(24px)",transition:"all 0.8s ease"}}>
-<Logo size={80} style={{margin:"0 auto"}}/><div style={{margin:"24px auto",width:48,height:1,background:G}}/>
+<Logo size={240} full={true} style={{margin:"0 auto",maxWidth:"70vw"}}/><div style={{margin:"28px auto",width:48,height:1,background:G}}/>
 <blockquote style={{fontFamily:CG,fontSize:"clamp(22px,3.5vw,30px)",color:CR,lineHeight:1.7,fontStyle:"italic",marginBottom:24}}>
 "DDC exists because nobody showed up for us. Nobody called. Nobody sent a box. Nobody said 'I know what this day feels like.'"</blockquote>
 <p style={{color:G,fontSize:14,fontWeight:600,letterSpacing:3,textTransform:"uppercase"}}>Kent Grossi</p>
@@ -413,7 +422,7 @@ style={{flex:1,padding:"16px",background:"#0D0D0D",border:"none",color:CR,fontFa
 (<p style={{color:G,fontWeight:500,fontSize:17}}>Welcome, brother.</p>)}</div></div>)}
 
 function Footer(){return(<footer style={{padding:"56px 24px 120px",background:D,borderTop:`1px solid ${DB}`,textAlign:"center"}}>
-<Logo size={44} style={{margin:"0 auto"}}/>
+<Logo size={180} full={true} style={{margin:"0 auto",maxWidth:"50vw"}}/>
 <p style={{color:"#444",fontSize:13,marginTop:20,letterSpacing:3,textTransform:"uppercase"}}>The Dead Dads Club · {new Date().getFullYear()}</p>
 <p style={{color:"#333",fontSize:12,marginTop:8,letterSpacing:1}}>The only club you never wanted to join.</p></footer>)}
 
