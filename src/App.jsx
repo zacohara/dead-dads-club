@@ -18,16 +18,22 @@ function SL({text}){return(<div style={{display:"flex",alignItems:"center",gap:1
 <div style={{width:28,height:1,background:`${G}50`}}/></div>)}
 function SW({children,bg=D,id}){return<section id={id} style={{padding:"120px 24px",background:bg,position:"relative"}}>{children}</section>}
 
-// ━━━ INTRO ━━━
-function Intro({onDone}){const[p,setP]=useState(0);
-useEffect(()=>{const a=setTimeout(()=>setP(1),200);const b=setTimeout(()=>setP(2),1400);const c=setTimeout(()=>setP(3),2600);const d=setTimeout(()=>onDone(),3400);
-return()=>{clearTimeout(a);clearTimeout(b);clearTimeout(c);clearTimeout(d)}},[]);
-return(<div style={{position:"fixed",inset:0,zIndex:9999,background:"#000",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+// ━━━ INTRO (skips for return visitors) ━━━
+function Intro({onDone}){const[p,setP]=useState(0);const timers=useRef([]);
+const finish=()=>{timers.current.forEach(t=>clearTimeout(t));try{sessionStorage.setItem('ddc-seen','1')}catch(e){}onDone()};
+useEffect(()=>{
+// Skip for return visitors
+try{if(sessionStorage.getItem('ddc-seen')){onDone();return}}catch(e){}
+timers.current=[setTimeout(()=>setP(1),200),setTimeout(()=>setP(2),1400),setTimeout(()=>setP(3),2600),setTimeout(finish,3400)];
+return()=>timers.current.forEach(t=>clearTimeout(t))},[]);
+return(<div onClick={finish} style={{position:"fixed",inset:0,zIndex:9999,background:"#000",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",
 opacity:p>=3?0:1,transition:"opacity 0.8s ease",pointerEvents:p>=3?"none":"all"}}>
 {p>=1&&<div style={{animation:"fadeIn 0.8s ease",position:"relative"}}><Logo size={180}/>
 <div style={{position:"absolute",inset:-24,borderRadius:8,boxShadow:`0 0 ${p>=2?100:30}px ${p>=2?50:15}px rgba(200,169,81,${p>=2?0.25:0.08})`,transition:"all 1s ease"}}/></div>}
 {p>=2&&<p style={{marginTop:36,fontFamily:CG,fontSize:22,color:`${GL}cc`,fontStyle:"italic",letterSpacing:2,animation:"fadeUp 0.8s ease",textAlign:"center",padding:"0 32px"}}>
-The only club you never wanted to join.</p>}</div>)}
+The only club you never wanted to join.</p>}
+{p>=1&&<p style={{position:"absolute",bottom:32,fontSize:13,color:"#444",letterSpacing:2,animation:"fadeIn 1s ease"}}>{isTouch?"tap":"click"} anywhere to skip</p>}
+</div>)}
 
 function Nav(){const[s,setS]=useState(false);
 useEffect(()=>{const h=()=>setS(window.scrollY>80);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h)},[]);
@@ -427,6 +433,13 @@ return(<div style={{minHeight:"100vh",background:D,padding:"40px 24px",maxWidth:
 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:40}}><div style={{display:"flex",alignItems:"center",gap:12}}>
 <Logo size={36}/><h1 style={{fontFamily:CG,fontSize:28,color:CR}}>DDC Admin</h1></div>
 <a href="/" style={{color:G,fontSize:14,textDecoration:"none",letterSpacing:2}}>← Site</a></div>
+<div style={{display:"flex",gap:10,marginBottom:24}}>
+<button onClick={()=>{const csv="email,joined\\n"+waitlist.map(w=>w.email+","+new Date(w.created_at).toLocaleDateString()).join("\\n");
+const blob=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ddc-waitlist.csv";a.click()}}
+style={{padding:"10px 20px",background:DC,border:`1px solid ${DB}`,borderRadius:3,color:"#aaa",fontFamily:OF,fontSize:13,cursor:"pointer"}}>📥 Export Waitlist CSV</button>
+<button onClick={()=>{const csv="name,years,message,by,anniversary,created\\n"+memorials.map(m=>[m.father_name,m.years||"",m.message.replace(/,/g,";"),m.submitted_by,m.anniversary_date||"",new Date(m.created_at).toLocaleDateString()].join(",")).join("\\n");
+const blob=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ddc-memorials.csv";a.click()}}
+style={{padding:"10px 20px",background:DC,border:`1px solid ${DB}`,borderRadius:3,color:"#aaa",fontFamily:OF,fontSize:13,cursor:"pointer"}}>📥 Export Memorials CSV</button></div>
 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:16,marginBottom:40}}>
 {[{n:stats.totalWaitlist,l:"Total Waitlist"},{n:stats.totalMemorials,l:"Total Memorials"},{n:stats.last24h,l:"Last 24h"},{n:stats.last7d,l:"Last 7 Days"}].map((s,i)=>(
 <div key={i} style={{padding:"24px 20px",background:DC,border:`1px solid ${DB}`,borderRadius:3,textAlign:"center"}}>
