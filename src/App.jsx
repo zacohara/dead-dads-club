@@ -9,8 +9,8 @@ function useInView(t=0.1){const r=useRef(null);const[v,s]=useState(false);
 useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([x])=>{if(x.isIntersecting){s(true);o.disconnect()}},{threshold:t});o.observe(e);return()=>o.disconnect()},[]);return[r,v]}
 
 function Logo({size=120,full=false,style={}}){
-return full?<img src="/ddc-logo-full.jpg" alt="The Dead Dads Club" style={{width:size,height:"auto",display:"block",...style}} loading="lazy"/>:
-<img src="/ddc-logo-icon.jpg" alt="DDC" style={{width:size,height:size,objectFit:"cover",display:"block",...style}} loading="lazy"/>}
+return full?<img src="/ddc-logo-v2.jpg" alt="The Dead Dads Club" style={{width:size,height:"auto",display:"block",...style}} loading="lazy"/>:
+<img src="/ddc-icon-v2.jpg" alt="DDC" style={{width:size,height:size,objectFit:"cover",display:"block",...style}} loading="lazy"/>}
 
 function GDiv(){return<div style={{width:80,height:2,background:`linear-gradient(90deg,transparent,${G},transparent)`,margin:"0 auto"}}/>}
 function SL({text}){return(<div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20,justifyContent:"center"}}>
@@ -18,25 +18,25 @@ function SL({text}){return(<div style={{display:"flex",alignItems:"center",gap:1
 <div style={{width:28,height:1,background:`${G}50`}}/></div>)}
 function SW({children,bg=D,id}){return<section id={id} style={{padding:"120px 24px",background:bg,position:"relative"}}>{children}</section>}
 
-// ━━━ INTRO (skips for return visitors) ━━━
-function Intro({onDone}){const[p,setP]=useState(0);const timers=useRef([]);
-const finish=()=>{timers.current.forEach(t=>clearTimeout(t));try{sessionStorage.setItem('ddc-seen','1')}catch(e){}onDone()};
+// ━━━ VIDEO INTRO ━━━
+function Intro({onDone}){const vidRef=useRef(null);const[fading,setFading]=useState(false);const[ready,setReady]=useState(false);
+const finish=()=>{if(fading)return;setFading(true);try{sessionStorage.setItem('ddc-seen','1')}catch(e){}setTimeout(onDone,800)};
 useEffect(()=>{
-// Skip for return visitors
 try{if(sessionStorage.getItem('ddc-seen')){onDone();return}}catch(e){}
-timers.current=[setTimeout(()=>setP(1),200),setTimeout(()=>setP(2),1200),setTimeout(()=>setP(3),2400),setTimeout(finish,3200)];
-return()=>timers.current.forEach(t=>clearTimeout(t))},[]);
-return(<div onClick={finish} style={{position:"fixed",inset:0,zIndex:9999,background:"#000",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",
-opacity:p>=3?0:1,transition:"opacity 0.8s ease",pointerEvents:p>=3?"none":"all"}}>
-{p>=1&&<div style={{animation:"fadeIn 0.8s ease",position:"relative",textAlign:"center"}}>
-<Logo size={140} style={{margin:"0 auto"}}/>
-<div style={{position:"absolute",inset:-30,borderRadius:8,boxShadow:`0 0 ${p>=2?120:30}px ${p>=2?60:15}px rgba(200,169,81,${p>=2?0.2:0.06})`,transition:"all 1s ease"}}/>
-</div>}
-{p>=2&&<div style={{animation:"fadeUp 0.8s ease",textAlign:"center",marginTop:28}}>
-<h1 style={{fontFamily:CG,fontSize:"clamp(32px,8vw,56px)",fontWeight:700,color:CR,lineHeight:1,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>The Dead Dads Club</h1>
-<p style={{fontFamily:CG,fontSize:"clamp(16px,3vw,22px)",color:CR,fontStyle:"italic",letterSpacing:2,opacity:0.85}}>
-The only club you never wanted to join.</p></div>}
-{p>=1&&<p style={{position:"absolute",bottom:32,fontSize:14,color:"#666",letterSpacing:2,animation:"fadeIn 1s ease"}}>{isTouch?"tap":"click"} anywhere to skip</p>}
+// Auto-finish when video ends
+const v=vidRef.current;if(v){v.addEventListener('ended',finish);v.addEventListener('canplay',()=>setReady(true))}
+// Fallback: if video fails to load, skip after 4s
+const fallback=setTimeout(()=>{if(!ready)finish()},4000);
+return()=>{clearTimeout(fallback);if(v){v.removeEventListener('ended',finish)}}
+},[ready]);
+return(<div onClick={finish} style={{position:"fixed",inset:0,zIndex:9999,background:"#000",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",
+opacity:fading?0:1,transition:"opacity 0.8s ease",pointerEvents:fading?"none":"all"}}>
+<video ref={vidRef} autoPlay muted playsInline
+style={{maxWidth:"90vw",maxHeight:"85vh",objectFit:"contain",borderRadius:4}}
+onError={finish}>
+<source src="/ddc-intro.mp4" type="video/mp4"/>
+</video>
+{ready&&<p style={{position:"absolute",bottom:32,fontSize:14,color:"#666",letterSpacing:2,animation:"fadeIn 1s ease"}}>{isTouch?"tap":"click"} to skip</p>}
 </div>)}
 
 function Nav(){const[s,setS]=useState(false);
@@ -83,12 +83,9 @@ return(<section id="top" ref={ref} style={{minHeight:"100vh",display:"flex",flex
 <div style={{position:"absolute",inset:0,background:`radial-gradient(ellipse at 50% 35%,#18120a 0%,${D} 70%)`,zIndex:0}}/>
 <div style={{position:"relative",zIndex:1,maxWidth:700,width:"100%",opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(30px)",transition:"all 1.2s ease"}}>
 
-{/* Logo icon (skeleton only — no baked text) + title as real HTML */}
-<div style={{marginBottom:20}}><Logo size={160} style={{margin:"0 auto",maxWidth:"45vw"}}/></div>
-<h1 style={{fontFamily:CG,fontSize:"clamp(40px,10vw,72px)",fontWeight:700,color:CR,lineHeight:1,letterSpacing:2,marginBottom:8,textTransform:"uppercase"}}>
-The Dead<br/>Dads Club</h1>
-<GDiv/>
-<p style={{fontFamily:CG,fontSize:"clamp(20px,4vw,28px)",color:CR,fontStyle:"italic",marginTop:20,marginBottom:44,letterSpacing:1,opacity:0.85}}>
+{/* V2 logo — high-res with fire/heart detail, readable at any size */}
+<div style={{marginBottom:24}}><Logo size={420} full={true} style={{margin:"0 auto",maxWidth:"88vw"}}/></div>
+<p style={{fontFamily:CG,fontSize:"clamp(20px,4vw,28px)",color:CR,fontStyle:"italic",marginBottom:44,letterSpacing:1,opacity:0.85}}>
 The only club you never wanted to join.</p>
 
 {!submitted?(<div><div style={{display:"flex",gap:0,maxWidth:460,margin:"0 auto",borderRadius:3,overflow:"hidden",border:`1px solid ${err?RD:DB}`}}>
