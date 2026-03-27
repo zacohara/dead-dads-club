@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
   <title>The Dead Dads Club — The Only Club You Never Wanted to Join</title>
-  <meta name="description" content="A premium men's brotherhood for men who lost their fathers, grew up fatherless, or carry the weight of an absent dad. Community. Box. Vault. Memorial Wall." />
-  <meta property="og:title" content="The Dead Dads Club" />
-  <meta property="og:description" content="The only club you never wanted to join. A brotherhood forged from shared loss — built to make men stronger, more connected, and more capable." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://thedeaddadsclub.netlify.app" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Dead Dads Club" />
-  <meta name="twitter:description" content="The only club you never wanted to join." />
-  <meta name="theme-color" content="#0A0A0A" />
-  <link rel="canonical" href="https://thedeaddadsclub.netlify.app" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☠️</text></svg>" />
+  <meta name="description" content="A premium men's brotherhood for men who lost their fathers, grew up fatherless, or carry the weight of an absent dad. Community. Box. Vault. Memorial Wall."/>
+  <meta property="og:title" content="The Dead Dads Club"/>
+  <meta property="og:description" content="The only club you never wanted to join. A brotherhood forged from shared loss."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://thedeaddadsclub.netlify.app"/>
+  <meta property="og:image" content="https://thedeaddadsclub.netlify.app/og-image.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="The Dead Dads Club"/>
+  <meta name="twitter:description" content="The only club you never wanted to join."/>
+  <meta name="twitter:image" content="https://thedeaddadsclub.netlify.app/og-image.jpg"/>
+  <meta name="theme-color" content="#0A0A0A"/>
+  <link rel="canonical" href="https://thedeaddadsclub.netlify.app"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☠️</text></svg>"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{background:#0A0A0A;color:#F5F0E8;font-family:'Outfit',sans-serif;overflow-x:hidden}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+    body{background:#0A0A0A;color:#F5F0E8;font-family:'Outfit',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+    @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(200,169,81,0.15)}50%{box-shadow:0 0 50px rgba(200,169,81,0.35)}}
     ::selection{background:#C8A951;color:#0A0A0A}
     input::placeholder,textarea::placeholder{color:#555}
-    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0A0A0A}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0A0A0A}::-webkit-scrollbar-thumb{background:#222;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#C8A951}
     button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #C8A951;outline-offset:2px}
-    @media(max-width:600px){.nav-links-text{display:none!important}}
+    button{transition:all 0.2s ease}button:active{transform:scale(0.97)}
+    @media(max-width:640px){.hide-mobile{display:none!important}.hero-title{font-size:52px!important}}
   </style>
 </head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
+<body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
 </html>
